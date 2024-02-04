@@ -2,6 +2,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject projectilePrefab;
+    public float fireRange = 10f;
+    public float fireRate = 1.0f;
+
+    private float timeSinceLastShot;
+
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotationSpeed; // Add a rotation speed variable
 
@@ -27,6 +33,7 @@ public class PlayerController : MonoBehaviour
         _movement = new Vector3(_moveInputs.x, 0f, _moveInputs.y);
         _movement *= Time.deltaTime * moveSpeed;
         _character.Move(_movement);
+        _animator.SetBool(_isRunningHash, _movement.sqrMagnitude > 0);
 
         // Rotate the player based on input
         if (_movement.sqrMagnitude > 0)
@@ -35,7 +42,39 @@ public class PlayerController : MonoBehaviour
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref rotationSpeed, 0.1f);
             transform.rotation = Quaternion.Euler(0, angle, 0);
         }
+        else if(_movement.sqrMagnitude == 0 && Time.time - timeSinceLastShot > fireRate)
+        {
+            timeSinceLastShot = Time.time;
+            FireProjectile(FindClosestEnemy());
+        }
 
-        _animator.SetBool(_isRunningHash, _movement.sqrMagnitude > 0);
+    }
+
+    GameObject FindClosestEnemy()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject closestEnemy = null;
+        float closestDistance = Mathf.Infinity;
+        Vector3 currentPosition = transform.position;
+
+        foreach (GameObject enemy in enemies)
+        {
+            float distanceToEnemy = Vector3.Distance(currentPosition, enemy.transform.position);
+
+            if (distanceToEnemy < closestDistance && distanceToEnemy <= fireRange)
+            {
+                closestEnemy = enemy;
+                closestDistance = distanceToEnemy;
+            }
+        }
+
+        return closestEnemy;
+    }
+
+    void FireProjectile(GameObject enemy)
+    {
+        // Instantiate a new projectile at the current position and rotation of this GameObject
+        GameObject go = Instantiate(projectilePrefab, transform.position + Vector3.up, Quaternion.LookRotation(enemy.transform.position - transform.position));
+        go.GetComponent<Rigidbody>().velocity = (enemy.transform.position - transform.position).normalized * 10f;
     }
 }
