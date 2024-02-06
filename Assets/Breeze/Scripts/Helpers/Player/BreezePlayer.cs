@@ -128,5 +128,6 @@ namespace Breeze.Core
            }
 #endif
         }
+
     }
 }

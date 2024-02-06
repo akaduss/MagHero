@@ -1,10 +1,12 @@
 using UnityEngine;
 using Akadus.HealthSystem;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class PlayerStats
 {
     public int gold;
+
     [Space(5)]
     [Header("Health")]
     public Health health;
@@ -17,21 +19,22 @@ public class PlayerStats
     public float attackRange = 2f;
     public float attackRate = 1.0f;
     [SerializeField] private float attackDamage = 20f;
+    public static bool isCrit;
 
     public float AttackDamage
     {
         get
         {
             // Check for a critical hit based on the criticalChance
-            if (Random.value < criticalChance)
+            if (UnityEngine.Random.value < criticalChance)
             {
-                // Apply critical damage
                 Debug.Log("big damage");
+                isCrit = true;
                 return CriticalDamage;
             }
             else
             {
-                // Return regular damage
+                isCrit = false;
                 return attackDamage;
             }
         }
@@ -40,18 +43,9 @@ public class PlayerStats
     public float criticalChance = 0.4f;
     public float criticalMultiplier = 2f;
 
-    // Read-only property for criticalDamage
     public float CriticalDamage
     {
         get { return attackDamage * criticalMultiplier; }
     }
-
-    // Add other stats as needed
-
-    public PlayerStats()
-    {
-        // Initialize default values
-    }
-
 
 }

@@ -19,12 +19,7 @@ namespace Akadus.HealthSystem
 
         [Header("Optional Settings")]
         [SerializeField] private TextType _textType = TextType.CurrentDivMax;
-        [SerializeField] private bool useCustomColors = false;
-        [SerializeField] private Color damageColor = Color.red;
-        [SerializeField] private Color healColor = Color.green;
-
         private float maxWidth;
-
 
         private void Awake()
         {
@@ -47,6 +42,11 @@ namespace Akadus.HealthSystem
 
         private void UpdateUI()
         {
+            if(GetComponent<MoreMountains.Tools.MMProgressBar>() != null)
+            {
+                GetComponent<MoreMountains.Tools.MMProgressBar>().UpdateBar(_targetHealth.CurrentHealth, 0f, _targetHealth.MaxHealth);
+                return;
+            }
 
             float healthPercentage = Mathf.Clamp01(_targetHealth.CurrentHealth / _targetHealth.MaxHealth);
             float newWidth = maxWidth * healthPercentage;
@@ -71,17 +71,8 @@ namespace Akadus.HealthSystem
                 }
             }
 
-            // Update the bar color based on damage or healing
-            UpdateBarColor();
         }
 
-        private void UpdateBarColor()
-        {
-            if (useCustomColors)
-            {
-                Color barColor = _targetHealth.CurrentHealth < _targetHealth.MaxHealth ? damageColor : healColor;
-                _foregroundBar.color = barColor;
-            }
-        }
+
     }
 }

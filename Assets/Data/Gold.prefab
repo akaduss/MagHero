@@ -67,8 +67,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5e1d35f45e54caebcc171c9181e6ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickupSound: {fileID: 8300000, guid: 7a97d2e9b2e1a35448bc3a491723bfed, type: 3}
+  singleSFXs:
+  - {fileID: 8300000, guid: 671e545a696ef49df9e6746391763bf5, type: 3}
+  - {fileID: 8300000, guid: f55bb86f6af5d4f49b1e7e9cc12d0794, type: 3}
+  - {fileID: 8300000, guid: e232c248524fd4514a3bcbbca01e3132, type: 3}
+  - {fileID: 8300000, guid: 05819b826ee68463ebe67a6c9ad69e54, type: 3}
+  pourSFXs:
+  - {fileID: 8300000, guid: f2aaaff934f9f4429a65d374504f87ae, type: 3}
+  - {fileID: 8300000, guid: b785f65bda2be4e17958879a8f790690, type: 3}
+  - {fileID: 8300000, guid: d75428c30f1c045f198152e9868f7cba, type: 3}
+  - {fileID: 8300000, guid: 16b42cf22a5c54086a0764ecc48e3fca, type: 3}
   goldValue: 1
+  sfxVolume: 1
 --- !u!1 &8768572519318124136
 GameObject:
   m_ObjectHideFlags: 0

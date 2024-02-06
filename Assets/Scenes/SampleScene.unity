@@ -319,6 +319,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6964793893983705883, guid: 5fc57c5648bd4494384a2119d9202735,
+        type: 3}
+      propertyPath: managedReferences[2320308337249353792].TargetGameObject
+      value: 
+      objectReference: {fileID: 5432298217335617912}
     - target: {fileID: 8343076521750015728, guid: 5fc57c5648bd4494384a2119d9202735,
         type: 3}
       propertyPath: portal
@@ -365,12 +370,12 @@ PrefabInstance:
     - target: {fileID: 1750060818057403152, guid: a9b4ed29927c04a7b8d4ead866898cf7,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 4.015322e-16
+      value: 3.1511815e-15
       objectReference: {fileID: 0}
     - target: {fileID: 1750060818057403152, guid: a9b4ed29927c04a7b8d4ead866898cf7,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 1.6406798e-15
+      value: 1.0238553e-15
       objectReference: {fileID: 0}
     - target: {fileID: 1750060818057403152, guid: a9b4ed29927c04a7b8d4ead866898cf7,
         type: 3}
@@ -481,7 +486,7 @@ PrefabInstance:
     - target: {fileID: 3449936694316374651, guid: f5e7369ef480f468db9db3301f22c296,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.72
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3449936694316374651, guid: f5e7369ef480f468db9db3301f22c296,
         type: 3}
@@ -590,12 +595,12 @@ PrefabInstance:
     - target: {fileID: 5453484830024393580, guid: 4a8772788c54449919bcf552f407096c,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 4.015322e-16
+      value: 3.1511815e-15
       objectReference: {fileID: 0}
     - target: {fileID: 5453484830024393580, guid: 4a8772788c54449919bcf552f407096c,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 1.6406798e-15
+      value: 1.0238553e-15
       objectReference: {fileID: 0}
     - target: {fileID: 5453484830024393580, guid: 4a8772788c54449919bcf552f407096c,
         type: 3}

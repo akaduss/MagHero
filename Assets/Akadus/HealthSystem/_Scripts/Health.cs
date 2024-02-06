@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+//using System.Numerics;
 using UnityEngine;
 
 namespace Akadus.HealthSystem
@@ -12,6 +13,7 @@ namespace Akadus.HealthSystem
         [SerializeField] private float currentHealth;
 
         private bool isInvulnerable = false;
+        public GameObject crit;
 
         public float CurrentHealth => currentHealth;
         public float MaxHealth => healthConfig.maxHealth;
@@ -64,6 +66,22 @@ namespace Akadus.HealthSystem
                 ShowFeedback(DamageColor, healthConfig.damageFeedbackDuration);
                 SetInvulnerability();
                 CheckDeath();
+                if (showVisualFeedback)
+                {
+                    GameObject go = DamageNumberPool.Instance.GetDamageNumber(transform.position + Vector3.up + transform.forward * 0.2f);
+                    go.GetComponent<DamageNumber>().SetDamage(Mathf.CeilToInt(damage));
+                    if (PlayerStats.isCrit)
+                    {
+                        print("crit");
+                        go.transform.localScale = Vector3.one;
+                        Instantiate(crit, transform.position + Vector3.up, Quaternion.identity);
+
+                    }
+                    else
+                    {
+                        go.transform.localScale = Vector3.one * 0.5f;
+                    }
+                }
             }
         }
 

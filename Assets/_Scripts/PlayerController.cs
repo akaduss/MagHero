@@ -1,13 +1,15 @@
 using UnityEngine;
 using System.Linq;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDeathHandler
 {
     public PlayerStats PlayerStats = new();
     public float fireRange = 10f;
     public float fireRate = 1.0f;
 
     private float timeSinceLastShot;
+
+    private bool isAlive;
 
     [SerializeField] private float facingEnemySpeed;
     [SerializeField] private LayerMask enemyLayer;
@@ -39,10 +41,13 @@ public class PlayerController : MonoBehaviour
         _inputActions = new PlayerActionMap();
         _inputActions.Enable();
         _inputActions.Player.Movement.performed += ctx => _moveInputs = ctx.ReadValue<Vector2>();
+        isAlive = true;
     }
 
     private void Update()
     {
+        if (isAlive == false) return;
+
         HandleMovementInput();
         ApplyGravity();
 
@@ -137,4 +142,14 @@ public class PlayerController : MonoBehaviour
 
         return closestEnemy;
     }
+
+    public void HandleDeath()
+    {
+        isAlive = false;
+        _animator.SetTrigger("Die");
+        targetMarkParticle.SetActive(false);
+
+        throw new System.NotImplementedException();
+    }
+
 }
