@@ -70,17 +70,17 @@ namespace Breeze.Addons.Spawner
             }
         }
 
-        private void LateUpdate()
-        {
-            foreach (var system in systemsSpawned.Where(system => Vector3.Distance(transform.position, system.transform.position) >= DestroyAIDistance))
-            {
-                systemsSpawned.Remove(system);
-                amountSpawned--;
-                Destroy(system.gameObject);
-                SpawnRandomAI();
-                break;
-            }
-        }
+        //private void LateUpdate()
+        //{
+        //    foreach (var system in systemsSpawned.Where(system => Vector3.Distance(transform.position, system.transform.position) >= DestroyAIDistance))
+        //    {
+        //        systemsSpawned.Remove(system);
+        //        amountSpawned--;
+        //        Destroy(system);
+        //        SpawnRandomAI();
+        //        break;
+        //    }
+        //}
 
         private int tries;
         private void SpawnRandomAI()

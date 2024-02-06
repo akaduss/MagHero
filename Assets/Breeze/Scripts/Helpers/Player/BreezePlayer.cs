@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
+using Akadus.HealthSystem;
 
 #if INVECTOR_MELEE
 using Invector;
@@ -28,32 +28,37 @@ namespace Breeze.Core
 {
     public class BreezePlayer : MonoBehaviour
     {
-       //Settings
-       public float CurrentHealth = 100f;
-       public Transform HitPosition;
+        //Settings
+        public float CurrentHealth = 100f;
+        public Transform HitPosition;
 
-       [HideInInspector] public UnityEvent<GameObject> gotAttackedEvent = new UnityEvent<GameObject>();
+        [HideInInspector] public UnityEvent<GameObject> gotAttackedEvent = new UnityEvent<GameObject>();
 
-       private void OnValidate()
-       {
-           if(Application.isPlaying)
-               return;
+        private void OnValidate()
+        {
+            if (Application.isPlaying)
+                return;
 
-           if (HitPosition == null)
-           {
-               GameObject hitPos = new GameObject("Hit Position");
-               hitPos.transform.SetParent(transform);
-               hitPos.transform.localPosition = new Vector3(0, 0.75f, 0);
-               hitPos.transform.localRotation.eulerAngles.Set(0,0,0);
-               hitPos.transform.localScale = new Vector3(1, 1, 1);
-               hitPos.AddComponent<BreezeHitPosition>();
+            if (HitPosition == null)
+            {
+                GameObject hitPos = new GameObject("Hit Position");
+                hitPos.transform.SetParent(transform);
+                hitPos.transform.localPosition = new Vector3(0, 0.75f, 0);
+                hitPos.transform.localRotation.eulerAngles.Set(0, 0, 0);
+                hitPos.transform.localScale = new Vector3(1, 1, 1);
+                hitPos.AddComponent<BreezeHitPosition>();
 
-               HitPosition = hitPos.transform;
-           }
-       }
+                HitPosition = hitPos.transform;
+            }
+        }
 
-       private void LateUpdate()
-       {
+        private void LateUpdate()
+        {
+            if (gameObject.GetComponent<Health>() != null)
+            {
+                CurrentHealth = gameObject.GetComponent<Health>().CurrentHealth;
+            }
+
 #if NEOFPS
            if(GetComponent<BasicHealthManager>() != null)
                CurrentHealth = GetComponent<BasicHealthManager>().health;
@@ -82,11 +87,12 @@ namespace Breeze.Core
                CurrentHealth = GetComponent<CharacterHealth>().HealthValue;
            }
 #endif
-       }
+        }
 
-       public void TakeDamage(float damage, GameObject sender)
-       {
-           gotAttackedEvent.Invoke(sender);
+        public void TakeDamage(float damage, GameObject sender)
+        {
+            gotAttackedEvent.Invoke(sender);
+            gameObject.GetComponent<Health>().TakeDamage(damage);
 #if NEOFPS
            if (GetComponent<BasicHealthManager>() != null)
            {
@@ -121,6 +127,6 @@ namespace Breeze.Core
                GetComponent<CharacterHealth>().Damage(damage);
            }
 #endif
-       }
+        }
     }
 }

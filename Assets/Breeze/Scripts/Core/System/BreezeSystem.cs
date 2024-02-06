@@ -2619,7 +2619,7 @@ namespace Breeze.Core
                 return;
             }
 
-            if (Sender.gameObject.Equals(gameObject))
+            if (Sender.Equals(gameObject))
             {
                 return;
             }

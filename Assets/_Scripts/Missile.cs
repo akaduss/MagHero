@@ -1,24 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
+using Breeze.Core;
 using UnityEngine;
 
 public class Missile : MonoBehaviour
 {
-    [SerializeField] private float _missileDamage;
-
+    [HideInInspector] public float MissileDamage;
+    public AudioClip collisionSound;
 
     private void OnCollisionEnter(Collision collision)
     {
-        print(collision.transform.name);
+
+        // Play collision sound when the missile collides with something
+        if (collisionSound != null)
+        {
+            AudioSource.PlayClipAtPoint(collisionSound, transform.position);
+        }
+
         if (collision.transform.TryGetComponent(out IDamageable component))
         {
-            component.TakeDamage(_missileDamage);
-            Destroy(this);
+
+            if (collision.transform.GetComponent<BreezeDamageBase>() != null)
+            {
+                Debug.Log("DAMAGEDD");
+                collision.transform.GetComponent<BreezeDamageable>().TakeDamage(MissileDamage, gameObject, true);
+            }
+            component.TakeDamage(MissileDamage);
+            Destroy(gameObject);
         }
         else
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
-
     }
 }

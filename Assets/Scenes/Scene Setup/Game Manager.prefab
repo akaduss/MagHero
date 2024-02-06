@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3830338420232171358
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5969769699553533847}
+  - component: {fileID: 7591177334524315450}
+  - component: {fileID: 8508395981414217634}
+  - component: {fileID: 8343076521750015728}
+  m_Layer: 0
+  m_Name: Game Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5969769699553533847
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3830338420232171358}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.4810152, z: 4.22}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7591177334524315450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3830338420232171358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f0fde8704ee74c1d84dcf7bed3f0dd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageNumberPrefab: {fileID: 6439744556841723323, guid: 17ba66b72277349099e858696dc948c7,
+    type: 3}
+  poolSize: 10
+--- !u!114 &8508395981414217634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3830338420232171358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf9ac5c4f4ad344d80a5f386907b6f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectsToSpawn:
+  - ObjectPrefab: {fileID: 2284508957225655378, guid: 6cd2006cfd09a4dc58c35006f9c3b7e8,
+      type: 3}
+    SpawnProbability: 100
+  AmountToSpawn: 1
+  MinimumSpawnDistance: 1
+  MaximumSpawnDistance: 10
+  DestroyAIDistance: 999
+  MaximumFloorAngle: 45
+  CollisionDetectionLayers:
+    serializedVersion: 2
+    m_Bits: 1
+  UseTextureDetection: 0
+  TextureDetectionList:
+  - ObjectPrefab: {fileID: 138836365270009319, guid: 7baba197ce36c92439b423eabaad3737,
+      type: 3}
+    SpawnableTextures:
+    - {fileID: 2800000, guid: cffb506ec5b6cc94498def65473d32ed, type: 3}
+  amountSpawned: 0
+  systemsSpawned: []
+--- !u!114 &8343076521750015728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3830338420232171358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a58ea8dc6076647d3a2aebdf56098719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

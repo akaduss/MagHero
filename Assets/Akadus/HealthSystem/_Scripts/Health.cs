@@ -34,7 +34,9 @@ namespace Akadus.HealthSystem
 
         private void ShowFeedback(Color color, float duration)
         {
-            if (visualRenderer != null && showVisualFeedback)
+            if (!showVisualFeedback) return;
+
+            if (visualRenderer != null)
             {
                 visualRenderer.material.color = color;
                 Invoke(nameof(ResetFeedback), duration);
@@ -107,7 +109,7 @@ namespace Akadus.HealthSystem
             }
             else
             {
-                Destroy(gameObject);
+                //Destroy(gameObject);
             }
         }
 
