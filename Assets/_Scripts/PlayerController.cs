@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour, IDeathHandler
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private GameObject targetMarkParticle;
     private GameObject enemy;
+    public GameObject levelupParticle;
+    public GameObject xpBar;
 
     private float rotationSpeed;
 
@@ -42,6 +44,27 @@ public class PlayerController : MonoBehaviour, IDeathHandler
         _inputActions.Enable();
         _inputActions.Player.Movement.performed += ctx => _moveInputs = ctx.ReadValue<Vector2>();
         isAlive = true;
+
+        EnemyDeath.OnEnemyDeath += EnemyDeath_OnEnemyDeath;
+        xpBar.GetComponent<MoreMountains.Tools.MMProgressBar>().UpdateBar01(0);
+
+    }
+
+    private void EnemyDeath_OnEnemyDeath(float obj)
+    {
+        PlayerStats.xp += obj;
+        print(xpBar.layer.ToString());
+        var nor = PlayerStats.xp / PlayerStats.NextLevelXp;
+        xpBar.GetComponent<MoreMountains.Tools.MMProgressBar>().UpdateBar01(nor);
+        if(PlayerStats.xp > PlayerStats.NextLevelXp)
+        {
+            PlayerStats.xp -= PlayerStats.NextLevelXp;
+            PlayerStats.level++;
+            nor = PlayerStats.xp / PlayerStats.NextLevelXp;
+            xpBar.GetComponent<MoreMountains.Tools.MMProgressBar>().UpdateBar01(nor);
+            levelupParticle.GetComponent<ParticleSystem>().Play();
+
+        }
     }
 
     private void Update()

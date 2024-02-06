@@ -1,7 +1,13 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemyDeath : MonoBehaviour, IDeathHandler
 {
+    public static event Action<float> OnEnemyDeath;
+
+
+    public float increaseXP = 20f;
     public Transform goldDropPrefab;
     public ParticleSystem particle;
     public ParticleSystem bigParticle;
@@ -10,6 +16,8 @@ public class EnemyDeath : MonoBehaviour, IDeathHandler
 
     public void HandleDeath()
     {
+        OnEnemyDeath?.Invoke(increaseXP);
+
         int rng = Akadus.Randomizer.GenerateGem();
         int randomCount;
         if (rng == 1)

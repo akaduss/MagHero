@@ -6,6 +6,18 @@ using System;
 public class PlayerStats
 {
     public int gold;
+    public float xp;
+    public int level;
+    public float NextLevelXp
+    {
+        get
+        {
+            return 100.0f * (float)level;
+        }
+    }
+
+    
+
 
     [Space(5)]
     [Header("Health")]

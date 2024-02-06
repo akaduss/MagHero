@@ -1118,6 +1118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c233f7a8933534f8eb9879de3371206d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  increaseXP: 70
   goldDropPrefab: {fileID: 4848587088197179585, guid: 236b481b1d7064c7d9f4e2e4cfb342b0,
     type: 3}
   particle: {fileID: 5395723512212564463}
