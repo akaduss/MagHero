@@ -47,7 +47,13 @@ public class PlayerController : MonoBehaviour, IDeathHandler
 
         EnemyDeath.OnEnemyDeath += EnemyDeath_OnEnemyDeath;
         xpBar.GetComponent<MoreMountains.Tools.MMProgressBar>().UpdateBar01(0);
+        DontDestroyOnLoad(gameObject);
+    }
 
+    private void Start()
+    {
+        Transform playerTransform = FindObjectOfType<PlayerController>().transform;
+        playerTransform.position = transform.position;
     }
 
     private void EnemyDeath_OnEnemyDeath(float obj)
