@@ -20,7 +20,6 @@ public class Missile : MonoBehaviour
 
             if (collision.transform.GetComponent<BreezeDamageBase>() != null)
             {
-                Debug.Log("DAMAGEDD");
                 collision.transform.GetComponent<BreezeDamageable>().TakeDamage(MissileDamage, gameObject, true);
             }
             component.TakeDamage(MissileDamage);

@@ -3,6 +3,8 @@ using System.Linq;
 
 public class PlayerController : MonoBehaviour, IDeathHandler
 {
+    public static PlayerController Instance;
+
     public PlayerStats PlayerStats = new();
     public float fireRange = 10f;
     public float fireRate = 1.0f;
@@ -36,6 +38,11 @@ public class PlayerController : MonoBehaviour, IDeathHandler
 
     private void Awake()
     {
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+
         enemyColliders = new Collider[maxColliders];
         _animator = GetComponentInChildren<Animator>();
         _character = GetComponent<CharacterController>();
@@ -45,22 +52,24 @@ public class PlayerController : MonoBehaviour, IDeathHandler
         _inputActions.Player.Movement.performed += ctx => _moveInputs = ctx.ReadValue<Vector2>();
         isAlive = true;
 
-        EnemyDeath.OnEnemyDeath += EnemyDeath_OnEnemyDeath;
+        EnemyDeath.OnEnemyDeath += OnEnemyDeath;
         xpBar.GetComponent<MoreMountains.Tools.MMProgressBar>().UpdateBar01(0);
         DontDestroyOnLoad(gameObject);
+
+        LoadNextLevel.Instance.OnLoadNextScene += Instance_OnLoadNextScene;
     }
 
-    private void Start()
+    private void Instance_OnLoadNextScene(Vector3 obj)
     {
-        Transform playerTransform = FindObjectOfType<PlayerController>().transform;
-        playerTransform.position = transform.position;
+        _character.enabled = false;
+        transform.position = obj; // Change the player's position
+        _character.enabled = true;
     }
 
-    private void EnemyDeath_OnEnemyDeath(float obj)
+    private void OnEnemyDeath(float obj)
     {
         PlayerStats.xp += obj;
-        print(xpBar.layer.ToString());
-        var nor = PlayerStats.xp / PlayerStats.NextLevelXp;
+        float nor = PlayerStats.xp / PlayerStats.NextLevelXp;
         xpBar.GetComponent<MoreMountains.Tools.MMProgressBar>().UpdateBar01(nor);
         if(PlayerStats.xp > PlayerStats.NextLevelXp)
         {

@@ -1,16 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Akadus.HealthSystem;
+using System;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public static event Action OnAllEnemiesDefeated;
 
     public bool isPlayed;
 
-    private List<GameObject> enemies;
-    //[SerializeField] private GameObject portal;
     [SerializeField] private float pullSpeed = 3f;
+
+    public List<EnemyDeath> enemies = new();
+
 
     private void Awake()
     {
@@ -24,56 +26,57 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        enemies = GetComponent<Breeze.Addons.Spawner.BreezeSpawnerCore>().systemsSpawned;
-    }
 
-    // Update is called once per frame
     void Update()
     {
-        if (IsAllEnemiesDead())
+        if (isPlayed)
         {
-            if(isPlayed == false)
-            {
-                isPlayed = true;
-                GetComponent<MoreMountains.Feedbacks.MMF_Player>().CanPlayWhileAlreadyPlaying = false;
-                GetComponent<MoreMountains.Feedbacks.MMF_Player>().PlayFeedbacks();
-                //portal.SetActive(true);
-                PullGoldToPlayer();
-            }
+            PullGoldToPlayer();
+        }
+    }
+
+    public void Subscrige(EnemyDeath enemyDeath)
+    {
+        enemies.Add(enemyDeath);
+        enemyDeath.OnEnemyDie += EnemyDefeated;
+    }
+
+    private void EnemyDefeated()
+    {
+        // Check if all enemies are defeated
+        if (AreAllEnemiesDefeated())
+        {
+            // Trigger event when all enemies are defeated
+            OnAllEnemiesDefeated?.Invoke();
+            enemies = null;
+
+            isPlayed = true;
+            GetComponent<MoreMountains.Feedbacks.MMF_Player>().CanPlayWhileAlreadyPlaying = false;
+            GetComponent<MoreMountains.Feedbacks.MMF_Player>().PlayFeedbacks();
+            //portal.SetActive(true);
+            PullGoldToPlayer();
 
         }
     }
 
-    bool IsAllEnemiesDead()
+    private bool AreAllEnemiesDefeated()
     {
-        int count = enemies.Count;
-        int dead = 0;
-
         foreach (var enemy in enemies)
         {
-            if (enemy.GetComponent<Health>().CurrentHealth <= 0f)
+            if (enemy.GetComponent<Akadus.HealthSystem.Health>().CurrentHealth > 0f)
             {
-                dead++;
+                // If at least one enemy is still active, return false
+                return false;
             }
-
         }
-
-        if (count == dead)
-        {
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     void PullGoldToPlayer()
     {
         // Find all gold objects in the scene
         Pickup[] goldObjects = FindObjectsOfType<Pickup>(); // Adjust the tag accordingly
-        Transform playerTransform = FindObjectOfType<PlayerController>().transform;
+        Transform playerTransform = PlayerController.Instance.transform;
 
         foreach (var goldObject in goldObjects)
         {
@@ -86,3 +89,5 @@ public class GameManager : MonoBehaviour
         }
     }
 }
+
+
