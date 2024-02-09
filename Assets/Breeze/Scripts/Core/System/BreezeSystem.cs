@@ -333,7 +333,7 @@ namespace Breeze.Core
 
             if (FindObjectOfType<BreezeSoundManager>() == null && BreezeSoundManager.Instance == null)
             {
-                GameObject obj = new GameObject("Sound PAI");
+                GameObject obj = new("Sound PAI");
                 obj.AddComponent<BreezeSoundManager>();
                 obj.hideFlags = HideFlags.HideInHierarchy;
             }
