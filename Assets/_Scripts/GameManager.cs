@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     void Update()
     {
         if (isPlayed)
@@ -35,41 +34,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void Subscrige(EnemyDeath enemyDeath)
+    private void OnEnable()
     {
-        enemies.Add(enemyDeath);
-        enemyDeath.OnEnemyDie += EnemyDefeated;
+        EnemyManager.OnAllEnemiesDefeated += UnlockNextLevel;
     }
 
-    private void EnemyDefeated()
+    private void OnDisable()
     {
-        // Check if all enemies are defeated
-        if (AreAllEnemiesDefeated())
-        {
-            // Trigger event when all enemies are defeated
-            OnAllEnemiesDefeated?.Invoke();
-            enemies = null;
-
-            isPlayed = true;
-            GetComponent<MoreMountains.Feedbacks.MMF_Player>().CanPlayWhileAlreadyPlaying = false;
-            GetComponent<MoreMountains.Feedbacks.MMF_Player>().PlayFeedbacks();
-            //portal.SetActive(true);
-            PullGoldToPlayer();
-
-        }
+        EnemyManager.OnAllEnemiesDefeated -= UnlockNextLevel;
     }
 
-    private bool AreAllEnemiesDefeated()
+    private void UnlockNextLevel()
     {
-        foreach (var enemy in enemies)
-        {
-            if (enemy.GetComponent<Akadus.HealthSystem.Health>().CurrentHealth > 0f)
-            {
-                // If at least one enemy is still active, return false
-                return false;
-            }
-        }
-        return true;
+        Debug.Log("All enemies defeated! Unlocking next level...");
+        OnAllEnemiesDefeated?.Invoke();
+        isPlayed = true;
+        GetComponent<MoreMountains.Feedbacks.MMF_Player>().PlayFeedbacks();
+
     }
 
     void PullGoldToPlayer()
@@ -89,5 +70,3 @@ public class GameManager : MonoBehaviour
         }
     }
 }
-
-

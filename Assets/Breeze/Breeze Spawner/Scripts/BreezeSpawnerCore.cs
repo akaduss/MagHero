@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 #if Breeze_AI_Pathfinder_Enabled
 using Pathfinding;
 #else
@@ -20,10 +19,10 @@ namespace Breeze.Addons.Spawner
         public class SpawningObjects
         {
             public GameObject ObjectPrefab;
-            [Range(1, 100)] 
+            [Range(1, 100)]
             public int SpawnProbability = 50;
         }
-        
+
         [Serializable]
         public class SpawnTextures
         {
@@ -37,15 +36,15 @@ namespace Breeze.Addons.Spawner
         [Space] public float MaximumSpawnDistance = 30.0f;
         [Space] public float DestroyAIDistance = 40f;
 
-        [Space] 
+        [Space]
         public float MaximumFloorAngle = 45;
         [Space] public LayerMask CollisionDetectionLayers = 0;
-        
-        [Space] 
+
+        [Space]
         public bool UseTextureDetection = true;
         [Space] public List<SpawnTextures> TextureDetectionList = new List<SpawnTextures>();
 
-        [Space] 
+        [Space]
         public int amountSpawned = 0;
         [Space] public List<GameObject> systemsSpawned = new List<GameObject>();
 
@@ -62,7 +61,7 @@ namespace Breeze.Addons.Spawner
         }  
 #endif
 
-        public void Start()
+        public void Awake()
         {
             for (int i = 0; i < AmountToSpawn; i++)
             {
@@ -161,10 +160,10 @@ namespace Breeze.Addons.Spawner
             bool TextureOkay = false;
             bool PositionOkay = NavMesh.SamplePosition(PickRandomPoint(), out var hit, 3, NavMesh.AllAreas);
             Collider[] cols = new Collider[100];
-            var size = 
+            var size =
                 Physics.OverlapSphereNonAlloc(hit.position + new Vector3(0, 4, 0), 3, cols, CollisionDetectionLayers);
             colliderOkay = size <= 0;
-            
+
             if (Physics.Raycast(hit.position + new Vector3(0, 4, 0), Vector3.down, out var tex, 10))
             {
                 angleOkay = Vector3.Angle(tex.normal, Vector3.up) <= MaximumFloorAngle;
@@ -181,7 +180,7 @@ namespace Breeze.Addons.Spawner
                                     TextureOkay = true;
                                 }
                             }
-                        }   
+                        }
                     }
                 }
                 else
@@ -193,7 +192,7 @@ namespace Breeze.Addons.Spawner
                         {
                             foreach (var texture in Object.SpawnableTextures)
                             {
-                                if (texture.Equals(returnTerrainTexture(terrain, tex.point)))
+                                if (texture.Equals(ReturnTerrainTexture(terrain, tex.point)))
                                 {
                                     TextureOkay = true;
                                     break;
@@ -206,15 +205,15 @@ namespace Breeze.Addons.Spawner
 
             if (!UseTextureDetection)
                 TextureOkay = true;
-            
+
             if ((!colliderOkay || !TextureOkay || !PositionOkay || !angleOkay) && tries < 100)
             {
                 tries++;
                 SpawnRandomAI();
                 return;
             }
-            
-            if(tries >= 100)
+
+            if (tries >= 100)
                 return;
 
             tries = 0;
@@ -224,7 +223,7 @@ namespace Breeze.Addons.Spawner
         }
 
 
-        public Texture returnTerrainTexture(Terrain terrain, Vector3 hitPoint)
+        public Texture ReturnTerrainTexture(Terrain terrain, Vector3 hitPoint)
         {
             Vector3 TerrainPos = hitPoint - terrain.transform.position;
             Vector3 SplatMapPosition = new Vector3(TerrainPos.x / terrain.terrainData.size.x, 0,
@@ -247,7 +246,8 @@ namespace Breeze.Addons.Spawner
 
             return terrain.terrainData.terrainLayers[primaryIndex].diffuseTexture;
         }
-        Vector3 PickRandomPoint () {
+        Vector3 PickRandomPoint()
+        {
             var point = Random.insideUnitSphere * MaximumSpawnDistance;
 
             point.y = 0;
@@ -267,14 +267,14 @@ namespace Breeze.Addons.Spawner
         public int GetRandomWeightedIndex(float[] weights)
         {
             if (weights == null || weights.Length == 0) return -1;
- 
+
             float w;
             float t = 0;
             int i;
             for (i = 0; i < weights.Length; i++)
             {
                 w = weights[i];
- 
+
                 if (float.IsPositiveInfinity(w))
                 {
                     return i;
@@ -285,19 +285,19 @@ namespace Breeze.Addons.Spawner
                     t += weights[i];
                 }
             }
- 
+
             float r = Random.value;
             float s = 0f;
- 
+
             for (i = 0; i < weights.Length; i++)
             {
                 w = weights[i];
                 if (float.IsNaN(w) || w <= 0f) continue;
- 
+
                 s += w / t;
                 if (s >= r) return i;
             }
- 
+
             return -1;
         }
     }

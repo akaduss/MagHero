@@ -20,7 +20,6 @@ public class DamageNumber : MonoBehaviour
         Invoke(nameof(DisableDamageNumber), displayDuration);
     }
 
-
     void Update()
     {
         // Move the damage number upwards

@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 public class EnemyDeath : MonoBehaviour, IDeathHandler
 {
     public static event Action<float> OnEnemyDeath;
-    public event Action OnEnemyDie;
+    public static event Action OnEnemyDie;
 
 
     public float increaseXP = 20f;
@@ -15,10 +15,6 @@ public class EnemyDeath : MonoBehaviour, IDeathHandler
 
     public float spreadRadius = 1.0f; // Radius within which drops will spread
 
-    private void Awake()
-    {
-        GameManager.Instance.Subscrige(this);
-    }
 
     public void HandleDeath()
     {

@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour, IDeathHandler
         xpBar.GetComponent<MoreMountains.Tools.MMProgressBar>().UpdateBar01(0);
         DontDestroyOnLoad(gameObject);
 
-        LoadNextLevel.Instance.OnLoadNextScene += Instance_OnLoadNextScene;
+        Portal.OnLoadNextScene += Instance_OnLoadNextScene;
     }
 
     private void Instance_OnLoadNextScene(Vector3 obj)
