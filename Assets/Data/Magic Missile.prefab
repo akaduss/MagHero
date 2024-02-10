@@ -19639,7 +19639,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1699459221867030}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
@@ -19686,7 +19686,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -19778,5 +19778,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MissileDamage: 0
-  spawnSound: {fileID: 8300000, guid: f08ce2b0c20924bfe844560b4770fe5a, type: 3}
+  explosion: {fileID: 1029544359644514, guid: aab2daf1fd2b23f4a9bdbbb38fc95704, type: 3}
   collisionSound: {fileID: 8300000, guid: 8a44b12d3e3f24b1a89dc7f0b66756f4, type: 3}
+  layer:
+    serializedVersion: 2
+    m_Bits: 512

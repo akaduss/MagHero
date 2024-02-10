@@ -1,10 +1,13 @@
 using Breeze.Core;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Missile : MonoBehaviour
 {
     [HideInInspector] public float MissileDamage;
+    public GameObject explosion;
     public AudioClip collisionSound;
+    public LayerMask layer;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -23,11 +26,12 @@ public class Missile : MonoBehaviour
                 collision.transform.GetComponent<BreezeDamageable>().TakeDamage(MissileDamage, gameObject, true);
             }
             component.TakeDamage(MissileDamage);
-            Destroy(gameObject);
         }
-        else
+        else if (collision.gameObject.layer == layer)
         {
-            Destroy(gameObject);
+            Instantiate(explosion);
         }
+        Destroy(gameObject);
+
     }
 }
