@@ -12,12 +12,10 @@ public class PlayerStats
     {
         get
         {
-            Debug.Log(100 * level);
+            //Debug.Log(100 * level);
             return 100.0f * (float)level;
         }
     }
-
-    
 
 
     [Space(5)]

@@ -26,7 +26,7 @@ public class DamageNumberPool : MonoBehaviour
 
         for (int i = 0; i < poolSize; i++)
         {
-            GameObject damageNumber = Instantiate(damageNumberPrefab);
+            GameObject damageNumber = Instantiate(damageNumberPrefab, transform);
             damageNumber.SetActive(false);
             damageNumberPool.Add(damageNumber);
         }
@@ -46,7 +46,7 @@ public class DamageNumberPool : MonoBehaviour
         }
 
         // If all damage numbers are active, instantiate a new one (expand the pool)
-        GameObject newDamageNumber = Instantiate(damageNumberPrefab);
+        GameObject newDamageNumber = Instantiate(damageNumberPrefab, transform);
         newDamageNumber.SetActive(false);
         damageNumberPool.Add(newDamageNumber);
         newDamageNumber.transform.position = position;
