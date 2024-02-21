@@ -8,10 +8,7 @@ public class GameManager : MonoBehaviour
     public static event Action OnAllEnemiesDefeated;
 
     public bool isPlayed;
-
     [SerializeField] private float pullSpeed = 3f;
-
-    public List<EnemyDeath> enemies = new();
 
 
     private void Awake()

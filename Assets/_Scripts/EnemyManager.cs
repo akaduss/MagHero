@@ -1,9 +1,6 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
-
-
 public class EnemyManager : MonoBehaviour
 {
     public static event Action OnAllEnemiesDefeated;
@@ -22,7 +19,6 @@ public class EnemyManager : MonoBehaviour
     {
         Portal.OnLoadNextScene -= Portal_OnLoadNextScene;
         EnemyDeath.OnEnemyDie -= HandleEnemyDeath;
-
     }
 
     private void Start()

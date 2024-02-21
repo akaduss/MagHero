@@ -18,8 +18,7 @@ public class Portal : MonoBehaviour
         }
         else
         {
-            // If there is no next scene, you can handle it accordingly
-            Debug.LogWarning("No next scene available.");
+            SceneManager.LoadScene(currentSceneIndex);
         }
     }
 
@@ -44,5 +43,10 @@ public class Portal : MonoBehaviour
             gameObject.SetActive(false);
             GameManager.Instance.isPlayed = false;
         }
+    }
+
+    public void LoadFirstLevel()
+    {
+        SceneManager.LoadScene(1);
     }
 }

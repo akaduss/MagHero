@@ -49,8 +49,8 @@ MonoBehaviour:
       type: 3}
     SpawnProbability: 100
   AmountToSpawn: 1
-  MinimumSpawnDistance: 10
-  MaximumSpawnDistance: 30
+  MinimumSpawnDistance: 0
+  MaximumSpawnDistance: 15
   DestroyAIDistance: 99
   MaximumFloorAngle: 45
   CollisionDetectionLayers:

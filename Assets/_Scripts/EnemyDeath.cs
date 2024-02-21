@@ -7,7 +7,7 @@ public class EnemyDeath : MonoBehaviour, IDeathHandler
     public static event Action<float> OnEnemyDeath;
     public static event Action OnEnemyDie;
 
-
+    public int points = 10;
     public float increaseXP = 20f;
     public Transform goldDropPrefab;
     public ParticleSystem particle;

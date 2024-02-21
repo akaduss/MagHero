@@ -1,10 +1,6 @@
 using System;
 using System.Collections.Generic;
-#if Breeze_AI_Pathfinder_Enabled
-using Pathfinding;
-#else
 using UnityEngine.AI;
-#endif
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -69,18 +65,6 @@ namespace Breeze.Addons.Spawner
             }
         }
 
-        //private void LateUpdate()
-        //{
-        //    foreach (var system in systemsSpawned.Where(system => Vector3.Distance(transform.position, system.transform.position) >= DestroyAIDistance))
-        //    {
-        //        systemsSpawned.Remove(system);
-        //        amountSpawned--;
-        //        Destroy(system);
-        //        SpawnRandomAI();
-        //        break;
-        //    }
-        //}
-
         private int tries;
         private void SpawnRandomAI()
         {
@@ -91,70 +75,6 @@ namespace Breeze.Addons.Spawner
             }
 
             GameObject systemToSpawn = ObjectsToSpawn[GetRandomWeightedIndex(weights)].ObjectPrefab;
-#if Breeze_AI_Pathfinder_Enabled
-            Vector3 dest = AstarPath.active.GetNearest(PickRandomPoint()).position;
-
-            Collider[] cols = new Collider[100];
-            var size = Physics.OverlapSphereNonAlloc(dest + new Vector3(0, 4, 0), 3, cols, CollisionDetectionLayers);
-            bool textureFound = false;
-            bool angleOkay = false;
-            if (Physics.Raycast(dest + new Vector3(0, 4, 0), Vector3.down, out var hit, 10))
-            {
-                angleOkay = Vector3.Angle(hit.normal, Vector3.up) <= MaximumFloorAngle;
-                if (hit.transform.GetComponent<Terrain>() == null)
-                {
-                    if (hit.transform.GetComponent<Renderer>() != null)
-                    {
-                        foreach (var Object in TextureDetectionList)
-                        {
-                            if (Object.ObjectPrefab.Equals(systemToSpawn))
-                            {
-                                if (Object.SpawnableTextures.Contains(hit.transform.gameObject.GetComponent<Renderer>().material.mainTexture))
-                                {
-                                    textureFound = true;
-                                }
-                            }
-                        }   
-                    }
-                }
-                else
-                {
-                    Terrain terrain = hit.transform.GetComponent<Terrain>();
-                    foreach (var Object in TextureDetectionList)
-                    {
-                        if (Object.ObjectPrefab.Equals(systemToSpawn))
-                        {
-                            foreach (var texture in Object.SpawnableTextures)
-                            {
-                                if (texture.Equals(returnTerrainTexture(terrain, hit.point)))
-                                {
-                                    textureFound = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (!UseTextureDetection)
-                textureFound = true;
-
-            if ((size > 0 || !textureFound || !angleOkay) && tries < 100)
-            {
-                tries++;
-                SpawnRandomAI();
-                return;
-            }
-            
-            if(tries >= 100)
-                return;
-
-            tries = 0;
-            systemsSpawned.Add(Instantiate(systemToSpawn.gameObject, dest, Quaternion.identity));
-            amountSpawned++;
-
-#else
             bool colliderOkay = false;
             bool angleOkay = false;
             bool TextureOkay = false;
@@ -219,7 +139,6 @@ namespace Breeze.Addons.Spawner
             tries = 0;
             systemsSpawned.Add(Instantiate(systemToSpawn.gameObject, hit.position, Quaternion.identity));
             amountSpawned++;
-#endif
         }
 
 

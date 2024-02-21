@@ -1,9 +1,12 @@
 using UnityEngine;
 using System.Linq;
+using System;
+using TMPro;
 
 public class PlayerController : MonoBehaviour, IDeathHandler
 {
     public static PlayerController Instance;
+
 
     public PlayerStats PlayerStats = new();
     public float fireRange = 10f;
@@ -18,6 +21,7 @@ public class PlayerController : MonoBehaviour, IDeathHandler
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private GameObject targetMarkParticle;
     private GameObject enemy;
+    public TextMeshProUGUI levelText;
     public GameObject levelupParticle;
     public GameObject xpBar;
 
@@ -42,6 +46,11 @@ public class PlayerController : MonoBehaviour, IDeathHandler
         {
             Instance = this;
         }
+        else
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject);
 
         enemyColliders = new Collider[maxColliders];
         _animator = GetComponentInChildren<Animator>();
@@ -54,7 +63,6 @@ public class PlayerController : MonoBehaviour, IDeathHandler
 
         EnemyDeath.OnEnemyDeath += OnEnemyDeath;
         xpBar.GetComponent<MoreMountains.Tools.MMProgressBar>().UpdateBar01(0);
-        DontDestroyOnLoad(gameObject);
 
         Portal.OnLoadNextScene += Instance_OnLoadNextScene;
     }
@@ -78,7 +86,7 @@ public class PlayerController : MonoBehaviour, IDeathHandler
             nor = PlayerStats.xp / PlayerStats.NextLevelXp;
             xpBar.GetComponent<MoreMountains.Tools.MMProgressBar>().UpdateBar01(nor);
             levelupParticle.GetComponent<ParticleSystem>().Play();
-
+            levelText.text = PlayerStats.level.ToString();
         }
     }
 
