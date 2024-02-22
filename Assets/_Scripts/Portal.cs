@@ -45,8 +45,4 @@ public class Portal : MonoBehaviour
         }
     }
 
-    public void LoadFirstLevel()
-    {
-        SceneManager.LoadScene(1);
-    }
 }

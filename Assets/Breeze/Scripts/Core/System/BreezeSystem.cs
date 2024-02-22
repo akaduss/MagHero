@@ -1149,7 +1149,7 @@ namespace Breeze.Core
             {
                 foreach (var effect in ParticlesList)
                 {
-                    if (effect.ObjectTag.Equals(GetTarget().tag))
+                    if (GetTarget().CompareTag(effect.ObjectTag))
                     {
                         if (!TargetIsPlayer)
                         {
@@ -1178,9 +1178,13 @@ namespace Breeze.Core
             //Initialize Damage
             if (TargetIsPlayer)
             {
+                BreezeSounds.PlaySound(SoundType.AttackSuccessful);
+
+                if (currentDamageAmount <= 0)
+                    return;
+
                 PlayerScript.TakeDamage(currentDamageAmount, gameObject);
                 BreezeEvents.OnDealDamage.Invoke(currentDamageAmount);
-                BreezeSounds.PlaySound(SoundType.AttackSuccessful);
             }
             else if (!TargetAIScript.Blocking)
             {
@@ -3195,7 +3199,7 @@ namespace Breeze.Core
 
                     CurrentMovement = BreezeEnums.MovementType.None;
                     currentDamageAmount = Random.Range(AttackDamagesList[rand].minDamage,
-                        (AttackDamagesList[rand].MaxDamage + 1));
+                        (AttackDamagesList[rand].MaxDamage));                
 
 
                     anim.SetBool("Attack", true);

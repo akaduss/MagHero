@@ -1,12 +1,13 @@
 using UnityEngine;
 using System.Linq;
-using System;
 using TMPro;
+using System;
 
 public class PlayerController : MonoBehaviour, IDeathHandler
 {
     public static PlayerController Instance;
 
+    public event Action OnPlayerDeath;
 
     public PlayerStats PlayerStats = new();
     public float fireRange = 10f;
@@ -50,7 +51,6 @@ public class PlayerController : MonoBehaviour, IDeathHandler
         {
             Destroy(gameObject);
         }
-        DontDestroyOnLoad(gameObject);
 
         enemyColliders = new Collider[maxColliders];
         _animator = GetComponentInChildren<Animator>();
@@ -65,6 +65,7 @@ public class PlayerController : MonoBehaviour, IDeathHandler
         xpBar.GetComponent<MoreMountains.Tools.MMProgressBar>().UpdateBar01(0);
 
         Portal.OnLoadNextScene += Instance_OnLoadNextScene;
+        levelText.text = PlayerStats.level.ToString();
     }
 
     private void Instance_OnLoadNextScene(Vector3 obj)
@@ -194,8 +195,9 @@ public class PlayerController : MonoBehaviour, IDeathHandler
         isAlive = false;
         _animator.SetTrigger("Die");
         targetMarkParticle.SetActive(false);
+        _character.enabled = false;
+        OnPlayerDeath?.Invoke();
 
-        throw new System.NotImplementedException();
     }
 
 }

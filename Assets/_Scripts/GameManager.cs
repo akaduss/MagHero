@@ -1,11 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public static event Action OnAllEnemiesDefeated;
+    public MoreMountains.Feedbacks.MMF_Player playerDeathFeedback;
+
+    public GameObject gameoverui;
 
     public bool isPlayed;
     [SerializeField] private float pullSpeed = 3f;
@@ -21,6 +25,17 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        PlayerController.Instance.OnPlayerDeath += Instance_OnPlayerDeath;
+        gameoverui.SetActive(false);
+    }
+
+    private void Instance_OnPlayerDeath()
+    {
+        playerDeathFeedback.PlayFeedbacks();
     }
 
     void Update()
@@ -65,5 +80,11 @@ public class GameManager : MonoBehaviour
             // Move the gold object towards the player
             goldObject.transform.Translate(pullSpeed * Time.deltaTime * directionToPlayer.normalized);
         }
+    }
+
+    public void GoMenu()
+    {
+        SceneManager.LoadScene(0);
+        print(SceneManager.GetSceneByBuildIndex(0).name);
     }
 }

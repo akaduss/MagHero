@@ -23,11 +23,14 @@ public class EnemyManager : MonoBehaviour
 
     private void Start()
     {
-
-        //// Find all enemies in the scene and add them to the list
+        // Find all enemies in the scene and add them to the list
         EnemyDeath[] enemyArray = FindObjectsOfType<EnemyDeath>();
         enemies.AddRange(enemyArray);
         remainingEnemies = enemies.Count;
+        if(remainingEnemies <= 0)
+        {
+            OnAllEnemiesDefeated?.Invoke();
+        }
     }
 
     private void Portal_OnLoadNextScene(Vector3 obj)
@@ -41,7 +44,6 @@ public class EnemyManager : MonoBehaviour
     private void HandleEnemyDeath()
     {
         remainingEnemies--;
-        print(remainingEnemies);
         // Check if all enemies are defeated
         if (remainingEnemies <= 0)
         {

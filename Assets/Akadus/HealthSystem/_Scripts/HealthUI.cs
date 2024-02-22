@@ -37,7 +37,7 @@ namespace Akadus.HealthSystem
             }
 
             _targetHealth.OnHealthChanged += UpdateUI;
-
+            UpdateUI();
         }
 
         private void UpdateUI()

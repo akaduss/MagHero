@@ -2020,7 +2020,7 @@ MonoBehaviour:
   magicEffectPrefab: {fileID: 1018882707796302, guid: 7762631b64af83148a4b7e9dc85be4ca,
     type: 3}
   throwPosition: {fileID: 3738325549451460434}
-  throwForce: 15
+  throwForce: 300
 --- !u!1 &6458623593309802303
 GameObject:
   m_ObjectHideFlags: 0

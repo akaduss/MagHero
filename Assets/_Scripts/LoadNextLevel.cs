@@ -16,7 +16,5 @@ public class LoadNextLevel : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        DontDestroyOnLoad(gameObject);
     }
 }
