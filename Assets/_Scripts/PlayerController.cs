@@ -1,30 +1,15 @@
 using UnityEngine;
-using System.Linq;
-using TMPro;
 using System;
 
-public class PlayerController : MonoBehaviour, IDeathHandler
+public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
 
     public event Action OnPlayerDeath;
 
-    public PlayerStats PlayerStats = new();
-    public float fireRange = 10f;
-    public float fireRate = 1.0f;
-
-    private float timeSinceLastShot;
-
     private bool isAlive;
 
-    [SerializeField] private float facingEnemySpeed;
-    [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private GameObject targetMarkParticle;
-    private GameObject enemy;
-    public TextMeshProUGUI levelText;
-    public GameObject levelupParticle;
-    public GameObject xpBar;
 
     private float rotationSpeed;
 
@@ -32,9 +17,6 @@ public class PlayerController : MonoBehaviour, IDeathHandler
     private Animator _animator;
     private PlayerActionMap _inputActions;
     private CharacterController _character;
-    private SkillSystem _skillSystem;
-    private Collider[] enemyColliders;
-    private readonly int maxColliders = 20;
 
     private Vector2 _moveInputs;
     private Vector3 _movement;
@@ -52,43 +34,12 @@ public class PlayerController : MonoBehaviour, IDeathHandler
             Destroy(gameObject);
         }
 
-        enemyColliders = new Collider[maxColliders];
         _animator = GetComponentInChildren<Animator>();
         _character = GetComponent<CharacterController>();
-        _skillSystem = GetComponent<SkillSystem>();
         _inputActions = new PlayerActionMap();
         _inputActions.Enable();
         _inputActions.Player.Movement.performed += ctx => _moveInputs = ctx.ReadValue<Vector2>();
         isAlive = true;
-
-        EnemyDeath.OnEnemyDeath += OnEnemyDeath;
-        xpBar.GetComponent<MoreMountains.Tools.MMProgressBar>().UpdateBar01(0);
-
-        Portal.OnLoadNextScene += Instance_OnLoadNextScene;
-        levelText.text = PlayerStats.level.ToString();
-    }
-
-    private void Instance_OnLoadNextScene(Vector3 obj)
-    {
-        _character.enabled = false;
-        transform.position = obj; // Change the player's position
-        _character.enabled = true;
-    }
-
-    private void OnEnemyDeath(float obj)
-    {
-        PlayerStats.xp += obj;
-        float nor = PlayerStats.xp / PlayerStats.NextLevelXp;
-        xpBar.GetComponent<MoreMountains.Tools.MMProgressBar>().UpdateBar01(nor);
-        if(PlayerStats.xp > PlayerStats.NextLevelXp)
-        {
-            PlayerStats.xp -= PlayerStats.NextLevelXp;
-            PlayerStats.level++;
-            nor = PlayerStats.xp / PlayerStats.NextLevelXp;
-            xpBar.GetComponent<MoreMountains.Tools.MMProgressBar>().UpdateBar01(nor);
-            levelupParticle.GetComponent<ParticleSystem>().Play();
-            levelText.text = PlayerStats.level.ToString();
-        }
     }
 
     private void Update()
@@ -97,32 +48,13 @@ public class PlayerController : MonoBehaviour, IDeathHandler
 
         HandleMovementInput();
         ApplyGravity();
-
-        enemy = FindClosestEnemy();
-
-        HandleEnemyMarker();
-
         HandleRotation();
-
-        HandleAttack();
-    }
-
-    private void HandleEnemyMarker()
-    {
-        if (enemy == null)
-        {
-            targetMarkParticle.SetActive(false);
-            return;
-        }
-
-        targetMarkParticle.SetActive(true);
-        targetMarkParticle.transform.position = enemy.transform.position;
     }
 
     private void HandleMovementInput()
     {
         _movement = new Vector3(_moveInputs.x, 0f, _moveInputs.y);
-        _movement *= Time.deltaTime * PlayerStats.moveSpeed;
+        _movement *= Time.deltaTime * 5f;
         _character.Move(_movement);
         _animator.SetBool(_isRunningHash, _movement.sqrMagnitude > 0);
     }
@@ -135,24 +67,6 @@ public class PlayerController : MonoBehaviour, IDeathHandler
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref rotationSpeed, 0.1f);
             transform.rotation = Quaternion.Euler(0, angle, 0);
         }
-        else if (enemy != null)
-        {
-            Vector3 directionToEnemy = enemy.transform.position - transform.position;
-            Quaternion targetRotation = Quaternion.LookRotation(directionToEnemy);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, facingEnemySpeed * Time.deltaTime);
-        }
-    }
-
-    private void HandleAttack()
-    {
-        if (enemy == null) return;
-
-        bool canFire = _movement.sqrMagnitude == 0 && Time.time - timeSinceLastShot > fireRate;
-        if (canFire)
-        {
-            timeSinceLastShot = Time.time;
-            _skillSystem.DefaultAttack(enemy.transform, PlayerStats.AttackDamage);
-        }
     }
 
     void ApplyGravity()
@@ -162,42 +76,8 @@ public class PlayerController : MonoBehaviour, IDeathHandler
             velocity.y = -2f;
         }
 
-        velocity.y += PlayerStats.gravity * Time.deltaTime;
+        velocity.y -= Physics.gravity.sqrMagnitude * Time.deltaTime;
         _character.Move(velocity * Time.deltaTime);
-    }
-
-    private GameObject FindClosestEnemy()
-    {
-        float closestDistance = Mathf.Infinity;
-        GameObject closestEnemy = null;
-
-        int colliderCount = Physics.OverlapSphereNonAlloc(transform.position, fireRange, enemyColliders, enemyLayer);
-
-        if (colliderCount > 0)
-        {
-            foreach (var enemyCollider in enemyColliders.Take(colliderCount))
-            {
-                float distanceToEnemy = Vector3.Distance(transform.position, enemyCollider.transform.position);
-
-                if (distanceToEnemy < closestDistance)
-                {
-                    closestDistance = distanceToEnemy;
-                    closestEnemy = enemyCollider.gameObject;
-                }
-            }
-        }
-
-        return closestEnemy;
-    }
-
-    public void HandleDeath()
-    {
-        isAlive = false;
-        _animator.SetTrigger("Die");
-        targetMarkParticle.SetActive(false);
-        _character.enabled = false;
-        OnPlayerDeath?.Invoke();
-
     }
 
 }

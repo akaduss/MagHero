@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-//using System.Numerics;
 using UnityEngine;
 
 namespace Akadus.HealthSystem
@@ -70,17 +69,6 @@ namespace Akadus.HealthSystem
                 {
                     GameObject go = DamageNumberPool.Instance.GetDamageNumber(transform.position + Vector3.up + transform.forward * 0.2f);
                     go.GetComponent<DamageNumber>().SetDamage(Mathf.CeilToInt(damage));
-                    if (PlayerStats.isCrit)
-                    {
-                        print("crit");
-                        go.transform.localScale = Vector3.one;
-                        Instantiate(crit, transform.position + Vector3.up, Quaternion.identity);
-
-                    }
-                    else
-                    {
-                        go.transform.localScale = Vector3.one * 0.5f;
-                    }
                 }
             }
         }
@@ -124,10 +112,6 @@ namespace Akadus.HealthSystem
             if (TryGetComponent<IDeathHandler>(out var deathHandler))
             {
                 deathHandler.HandleDeath();
-            }
-            else
-            {
-                //Destroy(gameObject);
             }
         }
 
